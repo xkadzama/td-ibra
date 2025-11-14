@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список актуальных задач</title>
+</head>
+<body>
+{% if tasks %}
+    {% for task in tasks %}
+        <p><a href="{{ url_for('tasks.get_task', num=task.id) }}">{{ task.title }}</a></p>
+    {% endfor %}
+{% else %}
+    <p> Все задачи выполнены! </p>
+{% endif %}
+</body>
+</html>
