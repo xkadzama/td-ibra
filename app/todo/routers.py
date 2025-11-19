@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template
+
+from flask import Blueprint, render_template, request, redirect, url_for
 
 
 tasks_bp = Blueprint('tasks', __name__, template_folder='templates')
@@ -11,15 +12,33 @@ tasks = [
 ]
 
 
+# READ
 @tasks_bp.route('/') # /tasks/
 def get_all_tasks():
 	return render_template('all_tasks.html', tasks=tasks)
 
 
-@tasks_bp.route('/<int:num>') # /tasks/1
-def get_task(num):
-	# Дописать: Вывод нужной задачи из списка tasks по полученному id
-	# и отобразить (вернуть) на страницу html
-	return f'Полученый ID: {num}'
+# READ (1)
+@tasks_bp.route('/<int:id>') # /tasks/1
+def get_task(id):
+	for task in tasks:
+		if task.get('id') == id:
+			break
+	return render_template('detail_task.html', task=task)
+
+
+# CREATE
+@tasks_bp.route('/add_task', methods=['GET', 'POST'])
+def add_task():
+	if request.method == 'POST':
+		title = request.form.get('title')
+		content = request.form.get('content')
+		tasks.append({'id': tasks[-1].get('id')+1, 'title': title, 'content': content})
+		return redirect(url_for('tasks.get_all_tasks'))
+	return render_template('add_task.html') # GET
+
+
+# DELETE
+# Создать вьюху для удаления задачи из tasks (списка)
 
 

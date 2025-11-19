@@ -7,7 +7,7 @@
 <body>
 {% if tasks %}
     {% for task in tasks %}
-        <p><a href="{{ url_for('tasks.get_task', num=task.id) }}">{{ task.title }}</a></p>
+        <p><a href="{{ url_for('tasks.get_task', id=task.id) }}">{{ task.title }}</a></p>
     {% endfor %}
 {% else %}
     <p> Все задачи выполнены! </p>
