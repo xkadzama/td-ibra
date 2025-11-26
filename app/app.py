@@ -17,6 +17,9 @@ app.register_blueprint(tasks_bp, url_prefix='/tasks')
 with app.app_context(): # <-- открывает доступ к настройкам БД
     db.create_all()
 
+@app.route('/')
+def main_page():
+    return '<a href="tasks/"> Все задачи </a>'
 
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
