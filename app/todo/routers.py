@@ -1,5 +1,6 @@
-
 from flask import Blueprint, render_template, request, redirect, url_for
+from database.models.task import Task # type: ignore
+from database.engine import db # type: ignore
 
 
 tasks_bp = Blueprint('tasks', __name__, template_folder='templates')
