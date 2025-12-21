@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for
+from flask_login import login_user
 from database.models.auth import User # type: ignore
 from database.engine import db # type: ignore
 
@@ -14,25 +15,36 @@ def register():
 		email = request.form.get('email')
 		password = request.form.get('password')
 
-		# Сохранение данных в файл (Для демонстрации!)
-		# with open('users.txt', mode='a', encoding='UTF-8') as file:
-		# 	file.write(username)
-		# 	file.write(email)
-		# 	file.write(password)
-
 		# Сохранение данных в БД
 		user = User(username=username, email=email)
 		user.set_password(password)
 		db.session.add(user) # <-- ОЗУ
 		db.session.commit() # <--- в БД
-
-		# Перенаправить на другую функцию/страницу/путь...
-		# после всех действий
 		return redirect(url_for('auth.login'))
 
 	return render_template('register.html')
 
 
-@auth_bp.route('/login')
+@auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
-	return 'Страница авторизации'
+	if request.method == 'POST':
+		email = request.form.get('email')
+		password = request.form.get('password')
+		user = User.query.filter_by(email=email).first()
+		if user or user.check_password(password):
+			login_user(user)
+			return redirect(url_for('tasks.get_all_tasks'))
+
+	return render_template('login.html')
+
+
+
+
+
+
+
+
+
+
+
+
