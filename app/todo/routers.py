@@ -11,11 +11,10 @@ tasks_bp = Blueprint('tasks', __name__, template_folder='templates')
 # READ
 @tasks_bp.route('/') # /tasks/
 def get_all_tasks():
-
 	tasks = Task.query.all()
 	for task in tasks:
 		print(task.title)
-	return render_template('all_tasks.html', tasks=tasks)
+	return render_template('all_tasks.html', tasks=tasks, current_user=current_user)
 
 
 # READ (1)
