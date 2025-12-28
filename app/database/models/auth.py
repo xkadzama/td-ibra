@@ -5,11 +5,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model, UserMixin):
 	__tablename__ = 'users'
-
 	id = db.Column('id', db.Integer, primary_key=True)
 	username = db.Column('username', db.String(150), unique=True, nullable=False)
 	email = db.Column('email', db.String(150), unique=True, nullable=False)
 	password_hash = db.Column(db.String(150), nullable=False)
+
+	tasks = db.relationship('Task', back_populates='user', lazy=True)
 
 	def __repr__(self):
 		return f'<{self.username}>'
@@ -18,9 +19,14 @@ class User(db.Model, UserMixin):
 		return f'<{self.username}>'
 
 	def set_password(self, password):
-		self.password_hash = generate_password_hash(password) # 123 -> fjhadfjadh83u81heeqhf
+		self.password_hash = generate_password_hash(password)
 
 	def check_password(self, password):
 		return check_password_hash(self.password_hash, password)
+
+
+
+# user = User.query.filter_by(id=3) # Musa
+# user.tasks # [Task1, Task2, Task3]
 
 

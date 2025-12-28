@@ -12,32 +12,33 @@ app = Flask(__name__)
 login_manager = LoginManager()
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'mysecret'
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SECRET_KEY"] = "mysecret"
 
 
-db.init_app(app) # Соединяем наше приложение с БД
-login_manager.init_app(app) # Соединяем наше приложение с системой авторизации
+db.init_app(app)  # Соединяем наше приложение с БД
+login_manager.init_app(app)  # Соединяем наше приложение с системой авторизации
 
 
-app.register_blueprint(tasks_bp, url_prefix='/tasks')
-app.register_blueprint(auth_bp, url_prefix='/auth')
-app.register_blueprint(account_bp, url_prefix='/account')
+app.register_blueprint(tasks_bp, url_prefix="/tasks")
+app.register_blueprint(auth_bp, url_prefix="/auth")
+app.register_blueprint(account_bp, url_prefix="/account")
 
 
-with app.app_context(): # <-- открывает доступ к настройкам БД
+with app.app_context():  # <-- открывает доступ к настройкам БД
     db.create_all()
 
 
 @login_manager.user_loader
-def load_user(user_id): # None
+def load_user(user_id):  # None
     return User.query.filter_by(id=int(user_id)).first()
 
 
-@app.route('/')
+@app.route("/")
 def main_page():
     return '<a href="tasks/"> Все задачи </a>'
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(debug=True, port=3000)
